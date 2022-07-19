@@ -6,18 +6,18 @@ A self-use script to fetch data from public APIs, corresponding to the parameter
 
 ## Notion 数据库结构 Notion Database Structure
 
-    | 字段名称 | 字段类型 | 字段描述 |
-    | -------- | ------- | ------- |
-    | 片名 | Title | 该片中文片名 |
-    | 外语片名 | Text | 英语片名或发行地区语言片名 |
-    | 分类 | Select | 该片所属类型，电影、纪录片、或剧集 |
-    | 导演 | Multi-select | 该片导演 |
-    | 主演 | Multi-select | 该片主演，记录5人，如果有知名演员则记录更多 |
-    | 类型 | Multi-select | 该片涉及的类型 |
-    | 国家/地区 | Multi-select | 该片发行的国家或地区 |
-    | 上映年份 | Select | 该片上映的年份 |
-    | 豆瓣 | URL | 该片的豆瓣页面 |
-    | 海报 | File&Media | 该片的海报 |
+| 字段名称 | 字段类型 | 字段描述 |
+| -------- | ------- | ------- |
+| 片名 | Title | 该片中文片名 |
+| 外语片名 | Text | 英语片名或发行地区语言片名 |
+| 分类 | Select | 该片所属类型，电影、纪录片、或剧集 |
+| 导演 | Multi-select | 该片导演 |
+| 主演 | Multi-select | 该片主演，记录5人，如果有知名演员则记录更多 |
+| 类型 | Multi-select | 该片涉及的类型 |
+| 国家/地区 | Multi-select | 该片发行的国家或地区 |
+| 上映年份 | Select | 该片上映的年份 |
+| 豆瓣 | URL | 该片的豆瓣页面 |
+| 海报 | File&Media | 该片的海报 |
 
 ## 获取数据方式 Get Data Method
 
