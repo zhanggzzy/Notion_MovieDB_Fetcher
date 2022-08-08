@@ -29,7 +29,7 @@ def search_with_TMDB(query, api_key=TMDB_apikey, language="zh-CN", page=1,
         'Authorization': 'Bearer ' + TMDB_api_token
         }
 
-    url = "https://api.themoviedb.org/4/search/movie?"
+    url = "https://api.themoviedb.org/3/search/movie?"
     # url += "api_key=" + api_key
     url += "&language=" + language
     url += "&query=" + query
@@ -59,10 +59,10 @@ def get_TMDB_movie_detail(TMDB_id, api_key=TMDB_apikey, language="zh-CN"):
         'Authorization': 'Bearer ' + TMDB_api_token
         }
 
-    url = "https://api.themoviedb.org/4/movie/"
-    url += str(TMDB_id)
+    url = "https://api.themoviedb.org/3/movie/"
     # url += "?api_key=" + TMDB_apikey
     url += "&language=" + language
+    # print(url)
     movie_data = requests.get(url, headers=header).json()
     return movie_data
 
@@ -74,7 +74,7 @@ def get_TMDB_movie_credits(TMDB_id, api_key=TMDB_apikey, language="zh-CN"):
         'Authorization': 'Bearer ' + TMDB_api_token
         }
 
-    url = "https://api.themoviedb.org/4/movie/"
+    url = "https://api.themoviedb.org/3/movie/"
     url += str(TMDB_id)
     url += "/credits"
     # url += "?api_key=" + TMDB_apikey
@@ -87,12 +87,13 @@ def get_TMDB_movie_poster(img_url):
     url = "https://image.tmdb.org/t/p/w1280" + img_url
     return url
 
-# FIXME: {'errors': ['id is not a valid integer']}
+
 def organize_TMDB_data(TMDB_id):
+    # print("Searching movie with TMDB ID: " + str(TMDB_id))
     movie_data = get_TMDB_movie_detail(TMDB_id)
     movie_credits = get_TMDB_movie_credits(TMDB_id)
-    print(movie_data)
-    print(movie_credits)
+    # print(movie_data)
+    # print(movie_credits)
     
     return movie_data, movie_credits
 
@@ -121,7 +122,7 @@ if __name__ == '__main__':
     # print('Movie Fetcher')
     result = search_with_TMDB(query="蝙蝠侠")
     organize_TMDB_data(result)
-    print(result)
+    # print(result)
     data = {
         "parent": {
             "type": "database_id",
