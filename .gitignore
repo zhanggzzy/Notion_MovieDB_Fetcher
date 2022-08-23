@@ -1,8 +1,0 @@
-# private info
-data/private.py
-
-# vscode local settings
-.vscode/
-
-# local running cache
-__pycache__/
