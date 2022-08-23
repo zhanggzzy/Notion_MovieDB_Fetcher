@@ -12,6 +12,8 @@ def get_request(site, url):
             'Authorization': 'Bearer ' + Notion_token,
             'Notion-Version': '2022-06-28'
         }
+    elif site == "wmdb":
+        header = {}
     
     return requests.get(url, headers=header).json()
 

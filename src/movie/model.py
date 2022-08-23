@@ -1,10 +1,13 @@
 from src.movie.TMDB import search_with_TMDB, get_TMDB_movie_detail, get_TMDB_movie_credits, organize_TMDB_data
+from src.movie.wmdb import organize_wmdb_data, search_with_wmdb, get_wmdb_movie_detail
+
 class Movie:
     
     def __init__(self, title) -> None:
         self.title = title
         self.tmdb_id = ""
         self.imdb_id = ""
+        self.douban_id = ""
         self.original_title = ""
         self.category = "电影"
         self.director = []
@@ -20,6 +23,7 @@ class Movie:
             "title: " + self.title + "\n" + \
             "tmdb_id: " + str(self.tmdb_id) + "\n" + \
             "imdb_id: " + self.imdb_id + "\n" + \
+            "douban_id " + self.douban_id + "\n" + \
             "original_title: " + self.original_title + "\n" + \
             "category: " + self.category + "\n" + \
             "director: " + ", ".join(self.director) + "\n" + \
@@ -42,8 +46,13 @@ class Movie:
             
             organize_TMDB_data(self, movie_detail, movie_credits)
             
-        elif method =="douban":
-            pass
+        elif method =="wmdb":
+            self.douban_id = search_with_wmdb(self.title)[0]['doubanId']
+            movie_detail = get_wmdb_movie_detail(self.douban_id)
+            # print(movie_detail)
+            
+            organize_wmdb_data(self, movie_detail)
+            
         
         # organize movie data
         # movie_item = self.organize_TMDB_data(movie_detail, movie_credits)
