@@ -1,8 +1,4 @@
-from textwrap import indent
-from urllib import response
-from matplotlib.pyplot import get
 import requests
-import json
 from private import TMDB_apikey, TMDB_api_token, Notion_token, Notion_DB_ID
 
 movie_struct = {
