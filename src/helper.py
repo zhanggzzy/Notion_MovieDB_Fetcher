@@ -21,15 +21,3 @@ def is_chinese(uchar):
         return True
     else:
         return False
-
-
-def show_json(json_data):
-    data = json_data.copy()
-    for key in data.keys():
-        if isinstance(data[key], dict):
-            show_json(data[key])
-        elif isinstance(data[key], list):
-            for item in data[key]:
-                show_json(item)
-        else:
-            print(key, data[key])

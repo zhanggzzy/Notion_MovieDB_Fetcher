@@ -1,5 +1,4 @@
-from webbrowser import get
-from src.helper import get_request, show_json
+from src.helper import get_request
 
 def search_with_TMDB(query, language="zh-CN", page=1, include_adult=False, 
                     region=None, year=None, primary_release_year=None):
