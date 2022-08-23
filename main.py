@@ -1,5 +1,5 @@
 import requests
-from private import TMDB_apikey, TMDB_api_token, Notion_token, Notion_DB_ID
+from data.private import TMDB_apikey, TMDB_api_token, Notion_token, Notion_DB_ID
 
 movie_struct = {
     "parent": {
@@ -218,7 +218,7 @@ class Movie:
         # get movie credits from TMDB
         movie_credits = self.get_TMDB_movie_credits(movie_id)
         
-        print(movie_credits)
+        # print(movie_credits)
     
         # organize movie data
         # movie_item = self.organize_TMDB_data(movie_detail, movie_credits)
