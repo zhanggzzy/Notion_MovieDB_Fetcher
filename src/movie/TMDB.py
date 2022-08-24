@@ -109,6 +109,17 @@ def organize_TMDB_data(movie, movie_detail, movie_credits):
     movie.release_date = movie_detail["release_date"]
     movie.region = [movie_detail['production_countries'][x]['name'] for x in range(len(movie_detail['production_countries']))]
     
+    # FIXME: list out of range
+        # Traceback (most recent call last):
+        # File "d:/Workspace/Notion_MovieDB_Fetcher/main.py", line 11, in <module>
+        # movie.generate_movie_data(method=search_method)
+        # File "d:\Workspace\Notion_MovieDB_Fetcher\src\movie\model.py", line 48, in generate_movie_data
+        # organize_TMDB_data(self, movie_detail, movie_credits)
+        # File "d:\Workspace\Notion_MovieDB_Fetcher\src\movie\TMDB.py", line 112, in organize_TMDB_data
+        # movie.cast = [movie_credits['cast'][x]['name'] for x in range(5)]
+        # File "d:\Workspace\Notion_MovieDB_Fetcher\src\movie\TMDB.py", line 112, in <listcomp>
+        # movie.cast = [movie_credits['cast'][x]['name'] for x in range(5)]
+        # IndexError: list index out of range
     movie.cast = [movie_credits['cast'][x]['name'] for x in range(5)]
     
     movie.director = [movie_credits['crew'][x]['name'] for x in range(len(movie_credits['crew'])) if movie_credits['crew'][x]['job'] == "Director"]

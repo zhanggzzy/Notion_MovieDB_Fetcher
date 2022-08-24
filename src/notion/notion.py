@@ -35,8 +35,8 @@ class Notion:
         
         
         url = "https://api.notion.com/v1/pages"
-        # return 0
-        return post_request("Notion", url, self.data)
+        return 0
+        # return post_request("Notion", url, self.data)
     
     def modify_title(self, key, value):
         self.data['properties'][key]['title'] = [{
