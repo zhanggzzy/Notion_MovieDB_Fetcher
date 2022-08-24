@@ -32,24 +32,28 @@ movie_struct = {
             }
         },
         "导演": {
-            "Multi-Select": [
-                {
-                    "name": "Steven Spielberg"
-                }
-            ]
+            "multi_select": []
         },
         "主演": {
-            "Multi-Select": [
-                {
-                    "name": "Leonardo DiCaprio"
-                },
-                {
-                    "name": "Tom Hanks"
-                },
-                # {
-                #     ""
-                # }
-            ]
+            "multi_select": []
+        },
+        "类型": {
+            "multi_select": []
+        },
+        "国家/地区": {
+            "multi_select": []
+        },
+        "上映年份": {
+            "select": {
+                "name": "2020",
+            }
+        },
+        "豆瓣": {
+            "url": ""
+        },
+        "海报": {
+            "type": "files",
+            "files": []
         }
     }
 }
