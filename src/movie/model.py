@@ -39,7 +39,15 @@ class Movie:
         
         if method == "TMDB":
             # search movie with TMDB
-            self.tmdb_id = search_with_TMDB(self.title)
+            results = search_with_TMDB(self.title)
+            results = [{
+                'id': r['id'], 
+                'title': r['title'], 
+                'original_title':r['original_title'], 
+                'released_date': r['release_date']
+            } for r in results]
+            
+            self.tmdb_id = self.select_movie(results)
             # get movie detail from TMDB
             movie_detail = get_TMDB_movie_detail(self.tmdb_id)
             # get movie credits from TMDB
@@ -48,19 +56,28 @@ class Movie:
             organize_TMDB_data(self, movie_detail, movie_credits)
             
         elif method =="wmdb":
-            results = search_with_wmdb(self.title)[:5]
-            # pprint(results)
-            results = [{'title': r['data'][0]['name'],'original_name':r['originalName'],'released_date':r['dateReleased']} for r in results]
+            results = search_with_wmdb(self.title)[:10]
+            results = [{
+                'id': r['doubanId'],
+                'title': r['data'][0]['name'],
+                'original_title':r['originalName'],
+                'released_date':r['dateReleased']
+            } for r in results]
 
-            for i, r in enumerate(results):
-                print("{} - {} \t {} \t {}".format(i, r['title'], r['original_name'], r['released_date']))
-            choice = int(input("Enter your choice: "))
-            self.douban_id = search_with_wmdb(self.title)[choice]['doubanId']
+            self.douban_id = self.select_movie(results)
             movie_detail = get_wmdb_movie_detail(self.douban_id)
-            # print(movie_detail)
             
             organize_wmdb_data(self, movie_detail)
             
+    
+    def select_movie(self, results):
+        print("0 - Exit")
+        for i, r in enumerate(results):
+            print("{} - {}\n\t{}\n\t{}".format(i+1, r['title'], r['original_title'], r['released_date']))
+        choice = int(input("Enter your choice: "))
         
-        # organize movie data
-        # movie_item = self.organize_TMDB_data(movie_detail, movie_credits)
+        if choice == 0:
+            exit()
+        
+        return results[choice-1]['id']
+    

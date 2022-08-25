@@ -1,4 +1,5 @@
 from src.helper import get_request
+from pprint import pprint
 
 def search_with_TMDB(query, language="zh-CN", page=1, include_adult=False, 
                     region=None, year=None, primary_release_year=None):
@@ -18,7 +19,7 @@ def search_with_TMDB(query, language="zh-CN", page=1, include_adult=False,
         Exception: No result found for the query.
 
     Returns:
-        int: movie ID in TMDB
+        search result
     """
     
     # build url
@@ -35,12 +36,7 @@ def search_with_TMDB(query, language="zh-CN", page=1, include_adult=False,
     if primary_release_year:
         url += "&primary_release_year=" + primary_release_year
     
-    movie_id = get_request("TMDB", url)["results"][0]["id"]
-
-    if movie_id:
-        return int(movie_id)
-    else:
-        raise Exception("No movie found")
+    return get_request("TMDB", url)['results']
 
 
 
@@ -103,23 +99,9 @@ def organize_TMDB_data(movie, movie_detail, movie_credits):
     movie.original_title = movie_detail["original_title"]
     movie.imdb_id = movie_detail["imdb_id"]
     movie.genre = [movie_detail["genres"][x]["name"] for x in range(len(movie_detail["genres"]))]
-
     movie.poster_url = get_TMDB_movie_poster(movie.tmdb_id, movie_detail["original_language"])    
-    
     movie.release_date = movie_detail["release_date"]
     movie.region = [movie_detail['production_countries'][x]['name'] for x in range(len(movie_detail['production_countries']))]
-    
-    # FIXME: list out of range
-        # Traceback (most recent call last):
-        # File "d:/Workspace/Notion_MovieDB_Fetcher/main.py", line 11, in <module>
-        # movie.generate_movie_data(method=search_method)
-        # File "d:\Workspace\Notion_MovieDB_Fetcher\src\movie\model.py", line 48, in generate_movie_data
-        # organize_TMDB_data(self, movie_detail, movie_credits)
-        # File "d:\Workspace\Notion_MovieDB_Fetcher\src\movie\TMDB.py", line 112, in organize_TMDB_data
-        # movie.cast = [movie_credits['cast'][x]['name'] for x in range(5)]
-        # File "d:\Workspace\Notion_MovieDB_Fetcher\src\movie\TMDB.py", line 112, in <listcomp>
-        # movie.cast = [movie_credits['cast'][x]['name'] for x in range(5)]
-        # IndexError: list index out of range
-    movie.cast = [movie_credits['cast'][x]['name'] for x in range(5)]
-    
+    num_of_cast = len(movie_credits['cast']) if len(movie_credits['cast']) < 10 else 10
+    movie.cast = [movie_credits['cast'][x]['name'] for x in range(num_of_cast)]
     movie.director = [movie_credits['crew'][x]['name'] for x in range(len(movie_credits['crew'])) if movie_credits['crew'][x]['job'] == "Director"]
