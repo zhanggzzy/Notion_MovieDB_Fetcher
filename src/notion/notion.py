@@ -20,6 +20,7 @@ class Notion:
         
         self.modify_title("中文片名", movie.title)
         self.modify_rich_text("片名", movie.original_title)
+        # TODO: catagory distinction
         # self.modify_select("分类", movie.category)
         self.modify_multi_select("导演", movie.director)
         self.modify_multi_select("主演", movie.cast)

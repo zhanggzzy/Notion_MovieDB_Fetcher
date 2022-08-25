@@ -16,3 +16,5 @@ if __name__ == '__main__':
     notion = Notion(Notion_token, Notion_DB_ID)
     
     notion.insert_into_notion(movie)
+    
+    # TODO: add a function to update the movie in Notion into english version
