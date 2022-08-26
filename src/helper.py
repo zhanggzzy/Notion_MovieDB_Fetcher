@@ -28,6 +28,16 @@ def post_request(site, url, data):
     return requests.post(url, headers=header, json=data).json()
 
 
+def patch_request(site, url, data):
+    if site == "Notion":
+        header = {
+            'Authorization': 'Bearer ' + Notion_token,
+            'Notion-Version': '2022-06-28'
+        }
+    
+    return requests.patch(url, headers=header, json=data).json()
+
+
 def is_chinese(uchar):
     if uchar >= u'\u4e00' and uchar <= u'\u9fa5':
         return True

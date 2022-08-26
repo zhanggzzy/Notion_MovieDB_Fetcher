@@ -4,7 +4,7 @@ from src.movie.wmdb import organize_wmdb_data, search_with_wmdb, get_wmdb_movie_
 
 class Movie:
     
-    def __init__(self, title) -> None:
+    def __init__(self, title, year=None) -> None:
         self.title = title
         self.tmdb_id = ""
         self.imdb_id = ""
@@ -15,6 +15,7 @@ class Movie:
         self.cast = []
         self.genre = []
         self.region = []
+        self.year = year
         self.release_date = ""
         self.poster_url = ""
     
@@ -39,7 +40,7 @@ class Movie:
         
         if method == "TMDB":
             # search movie with TMDB
-            results = search_with_TMDB(self.title)
+            results = search_with_TMDB(self.title, year=self.year)
             results = [{
                 'id': r['id'], 
                 'title': r['title'], 
