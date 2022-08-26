@@ -95,7 +95,7 @@ def get_TMDB_movie_poster(TMDB_id, language):
     return poster_url
 
 def organize_TMDB_data(movie, movie_detail, movie_credits):
-    
+    movie.title = movie_detail['title']
     movie.original_title = movie_detail["original_title"]
     movie.imdb_id = movie_detail["imdb_id"]
     movie.genre = [movie_detail["genres"][x]["name"] for x in range(len(movie_detail["genres"]))]

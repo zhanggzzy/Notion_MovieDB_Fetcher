@@ -40,7 +40,7 @@ class Movie:
         
         if method == "TMDB":
             # search movie with TMDB
-            results = search_with_TMDB(self.title, year=self.year)
+            results = search_with_TMDB(self.title, primary_release_year=self.year)
             results = [{
                 'id': r['id'], 
                 'title': r['title'], 

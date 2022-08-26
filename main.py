@@ -8,15 +8,17 @@ if __name__ == '__main__':
     
     
     movie_name = input("Enter movie name: ")
+    movie_year = input("Enter movie year(optional): ")
+    if movie_year == "":
+        movie_year = None
     # movie_name = "泰坦尼克号"
     search_method = input("Enter search method, either 'TMDB' or 'wmdb': ")
     # search_method = "TMDB"
-    movie = Movie(movie_name)
+    movie = Movie(movie_name, movie_year)
     
     movie.generate_movie_data(method=search_method)
 
     notion = Notion(Notion_token, Notion_DB_ID)
-    
     notion.insert_into_notion(movie)
     
-    # TODO: add a function to update the movie in Notion into english version
+    # TODO: add a function to update the series in Notion into english version
