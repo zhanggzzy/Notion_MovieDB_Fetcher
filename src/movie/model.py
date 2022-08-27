@@ -1,5 +1,5 @@
 from pprint import pprint
-from src.movie.TMDB import search_with_TMDB, get_TMDB_movie_detail, get_TMDB_movie_credits, organize_TMDB_data
+from src.movie.TMDB import search_movie_with_TMDB, get_TMDB_movie_detail, get_TMDB_movie_credits, organize_TMDB_data, search_with_TMDB
 from src.movie.wmdb import organize_wmdb_data, search_with_wmdb, get_wmdb_movie_detail
 
 class Movie:
@@ -36,19 +36,31 @@ class Movie:
             "poster_url: " + self.poster_url + "\n"
             
 
-    def generate_movie_data(self, method="TMDB"):
+    def generate_data(self, method="TMDB"):
         
         if method == "TMDB":
             # search movie with TMDB
-            results = search_with_TMDB(self.title, primary_release_year=self.year)
-            results = [{
-                'id': r['id'], 
-                'title': r['title'], 
-                'original_title':r['original_title'], 
-                'released_date': r['release_date']
-            } for r in results]
+            # results = search_movie_with_TMDB(self.title, primary_release_year=self.year)
+            results = search_with_TMDB(self.title)
+            results_movie = []
+            results_tv = []
+            for r in results:
+                if r['media_type'] == "movie":
+                    results_movie.append({
+                        'id': r['id'],
+                        'title': r['title'],
+                        'original_title': r['original_title'],
+                        'released_date': r['release_date'],
+                    })
+                elif r['media_type'] == "tv":
+                    results_tv.append({
+                        'id': r['id'],
+                        'title': r['name'],
+                        'original_title': r['original_name'],
+                        'released_date': r['first_air_date'],
+                    })
+            self.select_result(results_movie, results_tv)
             
-            self.tmdb_id = self.select_movie(results)
             # get movie detail from TMDB
             movie_detail = get_TMDB_movie_detail(self.tmdb_id)
             # get movie credits from TMDB
@@ -65,20 +77,31 @@ class Movie:
                 'released_date':r['dateReleased']
             } for r in results]
 
-            self.douban_id = self.select_movie(results)
+            self.douban_id = self.select_result(results)
             movie_detail = get_wmdb_movie_detail(self.douban_id)
             
             organize_wmdb_data(self, movie_detail)
             
     
-    def select_movie(self, results):
+    def select_result(self, results_movie, results_tv):
         print("0 - Exit")
-        for i, r in enumerate(results):
-            print("{} - {}\n\t{}\n\t{}".format(i+1, r['title'], r['original_title'], r['released_date']))
+        index = 1
+        for m in results_movie:
+            print("{} - [{}]{} {} ({})".format(index, "电影", m['title'], m['original_title'], m['released_date']))
+            index += 1
+        
+        for t in results_tv:
+            print("{} - [{}]{} {} ({})".format(index, "剧集", t['title'], t['original_title'], t['released_date']))
+            index += 1
+            
         choice = int(input("Enter your choice: "))
         
         if choice == 0:
             exit()
-        
-        return results[choice-1]['id']
+        elif choice <= len(results_movie):
+            self.tmdb_id = results_movie[choice-1]['id']
+            self.category = "电影"
+        elif len(results_movie) < choice <= len(results_tv) + len(results_movie):
+            self.tmdb_id = results_tv[choice-1-len(results_movie)]['id']
+            self.category = "剧集"
     

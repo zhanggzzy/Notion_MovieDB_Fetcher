@@ -8,15 +8,15 @@ if __name__ == '__main__':
     
     
     movie_name = input("Enter movie name: ")
-    movie_year = input("Enter movie year(optional): ")
-    if movie_year == "":
-        movie_year = None
-    # movie_name = "泰坦尼克号"
+    # movie_year = input("Enter movie year(optional): ")
+    # if movie_year == "":
+        # movie_year = None
+    # movie_name = "蝙蝠侠"
     search_method = input("Enter search method, either 'TMDB' or 'wmdb': ")
     # search_method = "TMDB"
-    movie = Movie(movie_name, movie_year)
+    movie = Movie(movie_name)
     
-    movie.generate_movie_data(method=search_method)
+    movie.generate_data(method=search_method)
 
     notion = Notion(Notion_token, Notion_DB_ID)
     notion.insert_into_notion(movie)

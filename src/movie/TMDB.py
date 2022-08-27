@@ -1,7 +1,8 @@
 from src.helper import get_request
 from pprint import pprint
 
-def search_with_TMDB(query, language="zh-CN", page=1, include_adult=False, 
+
+def search_movie_with_TMDB(query, language="zh-CN", page=1, include_adult=False, 
                     region=None, year=None, primary_release_year=None):
     """Search movie  with The Movie Database
 
@@ -38,6 +39,20 @@ def search_with_TMDB(query, language="zh-CN", page=1, include_adult=False,
     
     return get_request("TMDB", url)['results']
 
+
+def search_with_TMDB(query, language="zh-CN", page=1, include_adult=False, 
+                    region=None):
+    
+    url = "https://api.themoviedb.org/3/search/multi?"
+    url += "&language=" + language
+    url += "&query=" + query
+    url += "&page=" + str(page)
+    url += "&include_adult=" + str(include_adult)
+    if region:
+        url += "&region=" + region
+        
+    return get_request("TMDB", url)['results']
+   
 
 
 def get_TMDB_movie_detail(TMDB_id, language="zh-CN"):
