@@ -1,8 +1,9 @@
+from webbrowser import get
 from src.helper import get_request
 from pprint import pprint
 
 
-def search_movie_with_TMDB(query, language="zh-CN", page=1, include_adult=False, 
+def search_movie(query, language="zh-CN", page=1, include_adult=False, 
                     region=None, year=None, primary_release_year=None):
     """Search movie  with The Movie Database
 
@@ -40,8 +41,7 @@ def search_movie_with_TMDB(query, language="zh-CN", page=1, include_adult=False,
     return get_request("TMDB", url)['results']
 
 
-def search_with_TMDB(query, language="zh-CN", page=1, include_adult=False, 
-                    region=None):
+def search(query, language="zh-CN", page=1, include_adult=False, region=None):
     
     url = "https://api.themoviedb.org/3/search/multi?"
     url += "&language=" + language
@@ -55,7 +55,7 @@ def search_with_TMDB(query, language="zh-CN", page=1, include_adult=False,
    
 
 
-def get_TMDB_movie_detail(TMDB_id, language="zh-CN"):
+def get_movie_detail(TMDB_id, language="zh-CN"):
     """fetches movie detail from TMDB
 
     Args:
@@ -74,7 +74,7 @@ def get_TMDB_movie_detail(TMDB_id, language="zh-CN"):
     return get_request("TMDB", url)
 
 
-def get_TMDB_movie_credits(TMDB_id, language="zh-CN"):
+def get_movie_credits(TMDB_id, language="zh-CN"):
     """fetches movie credits from TMDB
 
     Args:
@@ -94,7 +94,7 @@ def get_TMDB_movie_credits(TMDB_id, language="zh-CN"):
     return get_request("TMDB", url)
 
 
-def get_TMDB_movie_poster(TMDB_id, language):
+def get_movie_poster(TMDB_id, language):
     url = "https://api.themoviedb.org/3/movie/"
     url += str(TMDB_id) + "/images?"
     url + "language=" + language
@@ -109,12 +109,21 @@ def get_TMDB_movie_poster(TMDB_id, language):
     
     return poster_url
 
+
+def get_series_detail(TMDB_id, language="zh-CN"):
+    url = "https://api.themoviedb.org/3/tv/{tv_id}?".format(tv_id=TMDB_id)
+    url += "language=" + language
+    
+    return get_request("TMDB", url)
+
+
+
 def organize_TMDB_data(movie, movie_detail, movie_credits):
     movie.title = movie_detail['title']
     movie.original_title = movie_detail["original_title"]
     movie.imdb_id = movie_detail["imdb_id"]
     movie.genre = [movie_detail["genres"][x]["name"] for x in range(len(movie_detail["genres"]))]
-    movie.poster_url = get_TMDB_movie_poster(movie.tmdb_id, movie_detail["original_language"])    
+    movie.poster_url = get_movie_poster(movie.tmdb_id, movie_detail["original_language"])    
     movie.release_date = movie_detail["release_date"]
     movie.region = [movie_detail['production_countries'][x]['name'] for x in range(len(movie_detail['production_countries']))]
     num_of_cast = len(movie_credits['cast']) if len(movie_credits['cast']) < 10 else 10

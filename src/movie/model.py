@@ -1,5 +1,5 @@
 from pprint import pprint
-from src.movie.TMDB import search_movie_with_TMDB, get_TMDB_movie_detail, get_TMDB_movie_credits, organize_TMDB_data, search_with_TMDB
+from src.movie.TMDB import get_movie_detail, get_movie_credits, organize_TMDB_data, search, get_series_detail
 from src.movie.wmdb import organize_wmdb_data, search_with_wmdb, get_wmdb_movie_detail
 
 class Movie:
@@ -41,7 +41,7 @@ class Movie:
         if method == "TMDB":
             # search movie with TMDB
             # results = search_movie_with_TMDB(self.title, primary_release_year=self.year)
-            search_results = search_with_TMDB(self.title)
+            search_results = search(self.title)
             results = []
             
             for r in search_results:
@@ -66,12 +66,16 @@ class Movie:
                     continue
                     
             self.select_result(results)
-            # get movie detail from TMDB
-            movie_detail = get_TMDB_movie_detail(self.tmdb_id)
-            # get movie credits from TMDB
-            movie_credits = get_TMDB_movie_credits(self.tmdb_id)
             
-            pprint(movie_detail)
+            if self.category == "电影":
+                detail = get_movie_detail(self.tmdb_id)
+                credits = get_movie_credits(self.tmdb_id)
+            elif self.category == "剧集":
+                detail = get_series_detail(self.tmdb_id)
+                pprint(detail)
+                credits = get_movie_credits(self.tmdb_id)
+            
+            # TODO: organize data
             # pprint(movie_credits)
             exit()
             
