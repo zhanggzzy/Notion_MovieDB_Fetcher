@@ -41,30 +41,39 @@ class Movie:
         if method == "TMDB":
             # search movie with TMDB
             # results = search_movie_with_TMDB(self.title, primary_release_year=self.year)
-            results = search_with_TMDB(self.title)
-            results_movie = []
-            results_tv = []
-            for r in results:
-                if r['media_type'] == "movie":
-                    results_movie.append({
-                        'id': r['id'],
-                        'title': r['title'],
-                        'original_title': r['original_title'],
-                        'released_date': r['release_date'],
-                    })
-                elif r['media_type'] == "tv":
-                    results_tv.append({
-                        'id': r['id'],
-                        'title': r['name'],
-                        'original_title': r['original_name'],
-                        'released_date': r['first_air_date'],
-                    })
-            self.select_result(results_movie, results_tv)
+            search_results = search_with_TMDB(self.title)
+            results = []
             
+            for r in search_results:
+                try:
+                    if r['media_type'] == "movie":
+                        results.append({
+                            'id': r['id'],
+                            'title': r['title'],
+                            'original_title': r['original_title'],
+                            'released_date': r['release_date'],
+                            'media_type': '电影'
+                        })
+                    elif r['media_type'] == "tv":
+                        results.append({
+                            'id': r['id'],
+                            'title': r['name'],
+                            'original_title': r['original_name'],
+                            'released_date': r['first_air_date'],
+                            'media_type': '剧集'
+                        })
+                except KeyError:
+                    continue
+                    
+            self.select_result(results)
             # get movie detail from TMDB
             movie_detail = get_TMDB_movie_detail(self.tmdb_id)
             # get movie credits from TMDB
             movie_credits = get_TMDB_movie_credits(self.tmdb_id)
+            
+            pprint(movie_detail)
+            # pprint(movie_credits)
+            exit()
             
             organize_TMDB_data(self, movie_detail, movie_credits)
             
@@ -83,25 +92,16 @@ class Movie:
             organize_wmdb_data(self, movie_detail)
             
     
-    def select_result(self, results_movie, results_tv):
+    def select_result(self, results):
         print("0 - Exit")
-        index = 1
-        for m in results_movie:
-            print("{} - [{}]{} {} ({})".format(index, "电影", m['title'], m['original_title'], m['released_date']))
-            index += 1
         
-        for t in results_tv:
-            print("{} - [{}]{} {} ({})".format(index, "剧集", t['title'], t['original_title'], t['released_date']))
-            index += 1
+        for i, r in enumerate(results):
+            print("{} - [{}]{} {} ({})".format(i+1, r['media_type'], r['title'], r['original_title'], r['released_date']))
             
         choice = int(input("Enter your choice: "))
         
         if choice == 0:
             exit()
-        elif choice <= len(results_movie):
-            self.tmdb_id = results_movie[choice-1]['id']
-            self.category = "电影"
-        elif len(results_movie) < choice <= len(results_tv) + len(results_movie):
-            self.tmdb_id = results_tv[choice-1-len(results_movie)]['id']
-            self.category = "剧集"
-    
+        else:
+            self.tmdb_id = results[choice-1]['id']
+            self.category = results[choice-1]['media_type']
