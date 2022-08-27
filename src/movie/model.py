@@ -1,5 +1,5 @@
 from pprint import pprint
-from src.movie.TMDB import get_movie_detail, get_movie_credits, organize_TMDB_data, search, get_series_detail
+from src.movie.TMDB import get_movie_detail, get_movie_credits, get_series_season_detail, organize_data, search, get_series_detail, get_series_season_credits
 from src.movie.wmdb import organize_wmdb_data, search_with_wmdb, get_wmdb_movie_detail
 
 class Movie:
@@ -10,7 +10,7 @@ class Movie:
         self.imdb_id = ""
         self.douban_id = ""
         self.original_title = ""
-        self.category = "电影"
+        self.category = ""
         self.director = []
         self.cast = []
         self.genre = []
@@ -24,7 +24,7 @@ class Movie:
         return \
             "title: " + self.title + "\n" + \
             "tmdb_id: " + str(self.tmdb_id) + "\n" + \
-            "imdb_id: " + self.imdb_id + "\n" + \
+            "imdb_id: " + str(self.imdb_id) + "\n" + \
             "douban_id " + self.douban_id + "\n" + \
             "original_title: " + self.original_title + "\n" + \
             "category: " + self.category + "\n" + \
@@ -67,19 +67,21 @@ class Movie:
                     
             self.select_result(results)
             
+            season_detail = None
             if self.category == "电影":
                 detail = get_movie_detail(self.tmdb_id)
                 credits = get_movie_credits(self.tmdb_id)
             elif self.category == "剧集":
                 detail = get_series_detail(self.tmdb_id)
-                pprint(detail)
-                credits = get_movie_credits(self.tmdb_id)
+                season_detail = self.select_season(detail)
+                credits = get_series_season_credits(self.tmdb_id, season_detail['season_number'])
             
+            # pprint(detail.keys())
+            # pprint(credits.keys())
             # TODO: organize data
             # pprint(movie_credits)
-            exit()
-            
-            organize_TMDB_data(self, movie_detail, movie_credits)
+            # exit()
+            organize_data(self, detail, credits, season_detail)
             
         elif method =="wmdb":
             results = search_with_wmdb(self.title)[:10]
@@ -109,3 +111,17 @@ class Movie:
         else:
             self.tmdb_id = results[choice-1]['id']
             self.category = results[choice-1]['media_type']
+    
+    def select_season(self, detail):
+        print("0 - Exit")
+        
+        for i, r in enumerate(detail['seasons']):
+            print("{} - {} ({})".format(i+1, r['name'], r['air_date']))
+            
+        choice = int(input("Enter your choice: "))
+        
+        if choice == 0:
+            exit()
+        else:
+            self.title += " " + detail['seasons'][choice-1]['name']
+            return get_series_season_detail(self.tmdb_id, detail['seasons'][choice-1]['season_number'])

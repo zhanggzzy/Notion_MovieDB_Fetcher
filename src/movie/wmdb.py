@@ -24,4 +24,3 @@ def organize_wmdb_data(movie, movie_detail):
     movie.region = movie_detail['data'][0]['country'].split(',')
     movie.release_date = movie_detail['dateReleased']
     movie.poster_url = movie_detail['data'][0]['poster']
-    
