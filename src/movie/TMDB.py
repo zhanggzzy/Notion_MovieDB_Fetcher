@@ -105,8 +105,10 @@ def get_movie_poster(TMDB_id, language):
     poster = [x for x in poster['posters'] if x['iso_639_1'] == language]
     
     # select the first one
-    poster_url = poster_url_pro + poster[0]['file_path']
-    
+    try:
+        poster_url = poster_url_pro + poster[0]['file_path']
+    except IndexError:
+        poster_url = None
     return poster_url
 
 def get_series_season_poster(TMDB_id, season_number, language="zh-CN"):
@@ -114,7 +116,6 @@ def get_series_season_poster(TMDB_id, season_number, language="zh-CN"):
     url += "?language=" + language
     poster_url_pro = "https://www.themoviedb.org/t/p/w1280"
     poster = get_request("TMDB", url)
-    pprint(poster)
     poster = [x for x in poster['posters'] if x['iso_639_1'] == language]
     # select the first one
     try:
@@ -148,7 +149,7 @@ def organize_data(movie, detail, credits, season_detail=None):
         movie.original_title = detail['original_title']
         movie.imdb_id = detail['imdb_id']
         movie.genre = [detail["genres"][x]["name"] for x in range(len(detail["genres"]))]
-        movie.poster_url = get_movie_poster(movie.tmdb_id, detail["original_language"])
+        movie.poster_url = get_movie_poster(movie.tmdb_id, detail["original_language"]) 
         movie.release_date = detail['release_date']
         movie.region = [detail['production_countries'][x]['name'] for x in range(len(detail['production_countries']))]
         num_of_cast = min(len(credits['cast']), 10)
